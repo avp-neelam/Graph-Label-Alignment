@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import os
 import gc
 import json
@@ -26,7 +23,7 @@ from torch_geometric.nn import (
     global_mean_pool, global_add_pool
 )
 
-# GPSConv is optional (needs torch_geometric>=2.3 typically)
+# GPSConv is optional
 try:
     from torch_geometric.nn import GPSConv
     _HAS_GPS = True
@@ -48,7 +45,6 @@ from scipy.sparse.linalg import eigsh
 # ----------------------------
 # Utilities
 # ----------------------------
-
 def set_global_seed(seed: int):
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -71,9 +67,8 @@ def clamp01(x: float) -> float:
 
 
 # ----------------------------
-# Your SLA/FLA evaluation core (LogReg + RBF-SVM)
+# SLA/FLA evaluation core (LogReg + RBF-SVM)
 # ----------------------------
-
 def class_weights(y):
     classes = np.unique(y)
     w = compute_class_weight(class_weight="balanced", classes=classes, y=y)
@@ -302,7 +297,6 @@ def aggregate_sla_fla(res: dict) -> dict:
 # ----------------------------
 # Synthetic dataset generator
 # ----------------------------
-
 @dataclass
 class SynthConfig:
     n_graphs: int
@@ -481,7 +475,6 @@ def generate_dataset(cfg: SynthConfig, seed: int) -> List[Data]:
 # ----------------------------
 # Basic GNNs + training (graph classification)
 # ----------------------------
-
 class GNN(nn.Module):
     def __init__(self, kind: str, in_ch: int, hidden: int, out_ch: int,
                  num_layers: int = 2, heads: int = 4, dropout: float = 0.5, pool: str = "mean"):
@@ -652,7 +645,6 @@ def train_and_score_adapted(model_name: str,
 # ----------------------------
 # Sweep driver
 # ----------------------------
-
 def parse_list(s: str) -> List[float]:
     # accepts "0,0.1,0.2" or "linspace(0,1,21)"
     s = s.strip()
